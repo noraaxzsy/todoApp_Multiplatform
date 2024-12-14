@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:to_do_app/pages/AddTodo.dart';
 import 'package:to_do_app/pages/HomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:to_do_app/pages/login_screen.dart';
 import 'firebase_options.dart';
 
  void main() async  {
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      home: LoginScreen(),
     );
   }
 }
