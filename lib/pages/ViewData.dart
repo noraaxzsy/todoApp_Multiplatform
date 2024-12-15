@@ -40,8 +40,8 @@ class _ViewDataState extends State<ViewData> {
         width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
           gradient: LinearGradient(colors: [
-            Color(0xff1d1e26),
-            Color(0xff252041),
+            Colors.white,
+            Colors.white70,
           ]),
         ),
         child: SingleChildScrollView(
@@ -60,7 +60,7 @@ class _ViewDataState extends State<ViewData> {
                     },
                     icon: Icon(
                       CupertinoIcons.arrow_left,
-                      color: Colors.white,
+                      color: Colors.black,
                       size: 28,
                     ),
                   ),
@@ -90,7 +90,7 @@ class _ViewDataState extends State<ViewData> {
                         },
                         icon: Icon(
                           Icons.edit,
-                          color: edit?Colors.green: Colors.white,
+                          color: edit?Colors.green: Colors.black,
                           size: 28,
                         ),
                       ),
@@ -105,85 +105,84 @@ class _ViewDataState extends State<ViewData> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      edit?"Editing":"View",
+                      edit?"Ubah":"Lihat",
                       style: TextStyle(
-                        fontSize: 33,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 4,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      "Your Todo",
-                      style: TextStyle(
-                        fontSize: 33,
-                        color: Colors.white,
+                        fontSize: 28,
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 2,
                       ),
                     ),
-                    SizedBox(height: 25,
+                    Text(
+                      "Aktivitas Saya",
+                      style: TextStyle(
+                        fontSize: 28,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2,
+                      ),
                     ),
-                    label("Task Title"),
+                    SizedBox(height: 15,
+                    ),
+                    label("Judul Aktivitas"),
                     SizedBox(
-                      height: 12,
+                      height: 8,
                     ),
                     title(),
                     SizedBox(
-                      height: 30,
+                      height: 15,
                     ),
-                    label("Task Type"),
+                    label("Tipe Aktivitas"),
                     SizedBox(
-                      height: 12,
+                      height: 8,
                     ),
                     Row(
                       children: [
-                        taskSelect("Important", 0xffff6d6e),
+                        taskSelect("Penting", 0xffA71D31),
                         SizedBox(
                           width: 20,
                         ),
-                        taskSelect("Planned", 0xff2bc8d9),
+                        taskSelect("Biasa", 0xff7067CF),
                       ],
                     ),
                     SizedBox(
-                      height: 25,
+                      height: 15,
                     ),
-                    label("Description"),
+                    label("Deskripsi"),
                     SizedBox(
-                      height: 12,
+                      height: 8,
                     ),
                     description(),
                     SizedBox(
-                      height: 25,
+                      height: 15,
                     ),
-                    label("Category"),
+                    label("Kategori"),
                     SizedBox(
-                      height: 12,
+                      height: 8,
                     ),
                     Wrap(
+                      alignment: WrapAlignment.start,
+                      crossAxisAlignment: WrapCrossAlignment.start,
                       runSpacing: 10,
                       children: [
-                        categorySelect("Food", 0xffff6d6e),
+                        categorySelect("Belajar", 0xff51355A),
                         SizedBox(
-                          width: 20,
+                          width: 15,
                         ),
-                        categorySelect("Workout", 0xff2bc8d9),
+                        categorySelect("Tugas", 0xff1B998B),
                         SizedBox(
-                          width: 20,
+                          width: 15,
                         ),
-                        categorySelect("Work", 0xff2bc8d9),
+                        categorySelect("Olahraga", 0xff1768AC),
                         SizedBox(
-                          width: 20,
+                          width: 15,
                         ),
-                        categorySelect("Design", 0xff2bc8d9),
+                        categorySelect("Hobi", 0xffB91372),
                         SizedBox(
-                          width: 20,
-                        ),categorySelect("Run", 0xff2bc8d9),
+                          width: 15,
+                        ),categorySelect("Main", 0xff058C42),
                         SizedBox(
-                          width: 20,
+                          width: 15,
                         ),
                       ],
                     ),
@@ -217,16 +216,16 @@ class _ViewDataState extends State<ViewData> {
             borderRadius: BorderRadius.circular(20),
             gradient: LinearGradient(
               colors: [
-                Color(0xff8a32f1),
-                Color(0xffad32f9),
+                Colors.yellowAccent,
+                Colors.orange,
               ],
             ),
           ),
           child: Center(
             child: Text(
-              "Update Todo",
+              "Ubah Aktivitas",
               style: TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
@@ -241,22 +240,23 @@ class _ViewDataState extends State<ViewData> {
       height: 150,
       width: MediaQuery.of (context).size.width,
       decoration: BoxDecoration(
-        color: Color(0xff2a2e3d),
+        color: Color(0xffD9D9D9),
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextFormField(
         controller: descriptionController,
         enabled: edit,
         style: TextStyle(
-          color: Colors.grey,
+          color: Colors.black,
           fontSize: 17,
         ),
         maxLines: null,
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: "Description",
+          hintText: "Deskripsi",
           hintStyle: TextStyle(
             color: Colors.grey,
+            fontWeight: FontWeight.normal,
             fontSize: 17,
           ),
           contentPadding: EdgeInsets.only(
@@ -276,7 +276,7 @@ class _ViewDataState extends State<ViewData> {
         });
       }: null,
       child: Chip(
-        backgroundColor: type==label? Colors.white : Color(color),
+        backgroundColor: type==label? Colors.yellowAccent : Color(color),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
             10,
@@ -306,7 +306,7 @@ class _ViewDataState extends State<ViewData> {
         });
       }:null,
       child: Chip(
-        backgroundColor: category==label? Colors.white : Color(color),
+        backgroundColor: category==label? Colors.yellowAccent : Color(color),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
             10,
@@ -333,22 +333,23 @@ class _ViewDataState extends State<ViewData> {
       height: 55,
       width: MediaQuery.of (context).size.width,
       decoration: BoxDecoration(
-        color: Color(0xff2a2e3d),
+        color: Color(0xffD9D9D9),
         borderRadius: BorderRadius.circular(15),
       ),child: Center(
         child: TextFormField(
           controller: titleController,
           enabled: edit,
           style: TextStyle(
-            color: Colors.grey,
+            color: Colors.black,
             fontSize: 17,
           ),
           decoration: InputDecoration(
             border: InputBorder.none,
-            hintText: "Task Title",
+            hintText: "Judul Aktivitas",
             hintStyle: TextStyle(
               color: Colors.grey,
               fontSize: 17,
+              fontWeight: FontWeight.normal,
             ),
             contentPadding: EdgeInsets.only(
               left: 20,
@@ -365,7 +366,7 @@ class _ViewDataState extends State<ViewData> {
     return Text(
       label,
       style: TextStyle(
-          color: Colors.white,
+          color: Colors.black,
           fontWeight: FontWeight.w600,
           fontSize: 16.5,
           letterSpacing: 0.2

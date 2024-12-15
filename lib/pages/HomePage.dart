@@ -1,5 +1,4 @@
-//import 'package:firebase_app_web/Service/Auth_Service.dart';
-// import 'package:firebase_app_web/main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,8 @@ import 'package:to_do_app/custom/TodoCard.dart';
 import 'package:to_do_app/pages/AddTodo.dart';
 import 'package:to_do_app/pages/Profile.dart';
 import 'package:to_do_app/pages/ViewData.dart';
+import 'package:intl/intl.dart';
+
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -16,67 +17,65 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // AuthClass authClass = AuthClass();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final Stream<QuerySnapshot> _stream=
       FirebaseFirestore.instance.collection("Todo").snapshots();
   List<Select> selected = [];
+
   @override
   Widget build(BuildContext context) {
+    String? _email = _auth.currentUser!.email;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
-          "Today's Schedule",
-          style: TextStyle(
-              fontSize: 34,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87),
-        ),
-        actions: const [
-          CircleAvatar(
-            backgroundImage: AssetImage("assets/profile.jpg"),
-          ),
-          SizedBox(
-            width: 25,
-          ),
-        ],
-        bottom: PreferredSize(
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Senin, 20",
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          title: Padding(
+            padding: const EdgeInsets.only(top: 10, left: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 0.0),
+                  child: Text(
+                    " Halo Aisy! ✨",
                     style: TextStyle(
-                        fontSize: 33,
+                        fontSize: 24,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black87),
-                  ),
-                  IconButton(
-                    onPressed: (){
-                        var instance = FirebaseFirestore.instance
-                            .collection("Todo");
-                        for(int i =0; i<selected.length; i++){
-                          if (selected[i].checkValue) {
-                            instance.doc(selected[i].id).delete();
-                          }
-                        }
-                    },
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                      size: 28,
+                        color: Colors.black87,
+                        height: 1.2,
                     ),
                   ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Text(" Yuk selesaikan tugasmu!",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black87,
+                          height: 1.2,
+                      )),
+                )
+              ],
             ),
           ),
-          preferredSize: const Size.fromHeight(35),
+
+          actions: const [
+            Padding(
+              padding: EdgeInsets.only(right: 16.0), // Menambahkan jarak dari tepi
+              child: CircleAvatar(
+                radius: 30, // Ubah ukuran lingkaran dengan menyesuaikan nilai radius
+                backgroundImage: AssetImage("assets/profile.jpg"),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -148,29 +147,46 @@ class _HomePageState extends State<HomePage> {
                   Color iconColor;
                   Map<String, dynamic> document =
                   snapshot.data!.docs[index].data() as Map<String, dynamic>;
-                  switch(document["Category"])
+                  // Ambil waktu dari dokumen (createdAt atau updatedAt)
+                  Timestamp? timestamp = document["updatedAt"] ?? document["createdAt"];
+                  String formattedTime;
+
+                  if (timestamp != null) {
+                    DateTime dateTime = timestamp.toDate(); // Ubah Timestamp ke DateTime
+                    formattedTime = DateFormat('hh:mm a').format(dateTime); // Format waktu
+                  } else {
+                    DateTime currentTime = DateTime.now(); // Waktu sekarang
+                    formattedTime = DateFormat('hh:mm a').format(currentTime); // Gunakan waktu sekarang
+                  }
+
+                  switch(document["category"])
                   {
-                    case "Work"://sesuai field
+                    case "Belajar"://sesuai field
                       iconData = Icons.work;
                       iconColor = Colors.red;
                       break;
-                    case "WorkOut":
+                    case "Olahraga":
                       iconData = Icons.sports_gymnastics;
                       iconColor = Colors.teal;
                       break;
-                    case "Food":
-                      iconData = Icons.food_bank_rounded;
+                    case "Hobi":
+                      iconData = Icons.directions_bike_rounded;
                       iconColor = Colors.blueGrey;
                       break;
-                    case "Design":
+                    case "Tugas":
                       iconData = Icons.draw;
                       iconColor = Colors.purple;
+                      break;
+                    case "Main":
+                      iconData = Icons.videogame_asset_rounded;
+                      iconColor = Colors.teal;
                       break;
                     default:
                       iconData = Icons.work;
                       iconColor = Colors.red;
                       break;
                   }
+
                   selected.add(Select(id:snapshot.data!.docs[index].id,checkValue: false ));
                   return InkWell(
                     onTap: () {
@@ -186,12 +202,12 @@ class _HomePageState extends State<HomePage> {
                     child: TodoCard(
                       title: document["title"]==null
                           ? "Hey There"
-                          : document["title"],//orgnya kyknya typo jd ttile
+                          : document["title"],
                       check: selected[index].checkValue,
                       iconBgColor: Colors.white,
                       iconColor: iconColor,
                       iconData: iconData,
-                      time: "5 AM",
+                      time: formattedTime,
                       index: index,
                       onChange: onChange,
                     ),
