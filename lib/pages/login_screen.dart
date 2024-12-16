@@ -25,11 +25,11 @@ class _LoginScreenState extends State<LoginScreen> {
       await _auth.signInWithEmailAndPassword(
           email: _email, password: _password);
       print("User Logged In: $userCredential.user!.email");
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(),
-          ));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+            (route) => false,
+      );
     }catch (e) {
       print("Error During Logged In: $e");
     }
