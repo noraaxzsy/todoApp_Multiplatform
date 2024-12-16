@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:to_do_app/pages/homescreen.dart';
 import 'package:to_do_app/pages/signup_screen.dart';
 import 'package:to_do_app/pages/HomePage.dart';
 
