@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do_app/Service/todo_provider.dart';
 import 'package:to_do_app/custom/TodoCard.dart';
 import 'package:to_do_app/pages/AddTodo.dart';
 import 'package:to_do_app/pages/Profile.dart';
@@ -25,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     String? _email = _auth.currentUser!.email;
+    final todoStream = Provider.of<TodoProvider>(context).todosStream;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
@@ -135,7 +138,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body:
       StreamBuilder(
-          stream: _stream,
+          stream: todoStream,
           builder: (context, snapshot) {
             if(!snapshot.hasData){
               return Center(child: CircularProgressIndicator());

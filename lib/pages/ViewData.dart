@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do_app/pages/HomePage.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do_app/Service/todo_provider.dart';
+
 
 class ViewData extends StatefulWidget {
   const ViewData({Key? key, required this.document, required this.id}): super(key: key);
@@ -67,14 +70,9 @@ class _ViewDataState extends State<ViewData> {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: (){
-                          FirebaseFirestore.instance
-                              .collection("Todo")
-                              .doc(widget.id)
-                              .delete()
-                              .then((value) {
-                                Navigator.pop(context);
-                          });
+                        onPressed: () async {
+                          await Provider.of<TodoProvider>(context, listen: false).deleteTodo(widget.id);
+                          Navigator.pop(context);
                         },
                         icon: Icon(
                           Icons.delete,
@@ -204,11 +202,19 @@ class _ViewDataState extends State<ViewData> {
 
   Widget button() {
     return InkWell(
-        onTap: () {
-          FirebaseFirestore.instance.collection("Todo").doc(widget.id).update(
-              {"title": titleController.text, "task": type, "category" : category, "description" : descriptionController.text});
+        onTap: () async {
+          await Provider.of<TodoProvider>(context, listen: false).updateTodo(
+            widget.id,
+            {
+              "title": titleController.text,
+              "task": type,
+              "category": category,
+              "description": descriptionController.text,
+            },
+          );
           Navigator.pop(context);
         },
+
         child: Container(
           height: 56,
           width: MediaQuery.of (context).size.width,

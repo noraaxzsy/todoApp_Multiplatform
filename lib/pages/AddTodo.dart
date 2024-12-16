@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do_app/pages/HomePage.dart';
+import 'package:to_do_app/Service/todo_provider.dart';
 
 class AddTodoPage extends StatefulWidget {
   const AddTodoPage({Key? key}): super(key: key);
@@ -152,12 +154,17 @@ class _AddTodoPageState extends State<AddTodoPage> {
 
   Widget button() {
     return InkWell(
-      onTap: () {
-        FirebaseFirestore.instance.collection("Todo").add(
-            {"title": titleController.text, "task": type, "category" : category, "description" : descriptionController.text});
-        Navigator.pop(context);
-      },
-      child: Container(
+        onTap: () async {
+          await Provider.of<TodoProvider>(context, listen: false).addTodo({
+            "title": titleController.text,
+            "task": type,
+            "category": category,
+            "description": descriptionController.text,
+          });
+          Navigator.pop(context);
+        },
+
+        child: Container(
         height: 56,
         width: MediaQuery.of (context).size.width,
         decoration: BoxDecoration(

@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do_app/pages/AddTodo.dart';
 import 'package:to_do_app/pages/HomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:to_do_app/pages/login_screen.dart';
 import 'firebase_options.dart';
+import 'package:to_do_app/Service/todo_provider.dart';
 
  void main() async  {
    WidgetsFlutterBinding.ensureInitialized();
    await Firebase.initializeApp( options: DefaultFirebaseOptions.currentPlatform);
    WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => TodoProvider()),
+      ],
+    child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
